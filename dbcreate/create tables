@@ -1,0 +1,90 @@
+CREATE TABLE Roles (
+    id SERIAL PRIMARY KEY,
+    role_name VARCHAR(20) NOT NULL
+);
+
+CREATE TABLE Users (
+    id SERIAL PRIMARY KEY,
+    role_id INT REFERENCES Roles(id),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    email VARCHAR(50) NOT NULL,
+    phone VARCHAR(15),
+    first_name VARCHAR(50),
+    last_name VARCHAR(50),
+    address VARCHAR(255),
+    username VARCHAR(30) NOT NULL,
+    password VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE Category (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(50) NOT NULL,
+    description TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE Product (
+    id SERIAL PRIMARY KEY,
+    category_id INT REFERENCES Category(id),
+    name VARCHAR(100) NOT NULL,
+    description TEXT,
+    price DECIMAL(10,2) NOT NULL,
+    image_url VARCHAR(255),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE Cart (
+    id SERIAL PRIMARY KEY,
+    user_id INT REFERENCES Users(id),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE CartItem (
+    id SERIAL PRIMARY KEY,
+    quantity INT NOT NULL,
+    price DECIMAL(10,2) NOT NULL,
+    created_at TIMESTAMP,
+    updated_at TIMESTAMP,
+    cart_id INT REFERENCES Cart(id),
+    product_id INT REFERENCES Product(id)
+);
+
+CREATE TABLE OrderStatus (
+    id SERIAL PRIMARY KEY,
+    status_name VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE PaymentMethod (
+    id SERIAL PRIMARY KEY,
+    method_name VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE "Order" (
+    id SERIAL PRIMARY KEY,
+    status_id INT REFERENCES OrderStatus(id),
+    cart_id INT REFERENCES Cart(id),
+    total_price DECIMAL(10,2) NOT NULL,
+    delivery_address VARCHAR(255) NOT NULL,
+    payment_method_id INT REFERENCES PaymentMethod(id),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE Review (
+    id SERIAL PRIMARY KEY,
+    user_id INT REFERENCES Users(id),
+    product_id INT REFERENCES Product(id),
+    rating INT NOT NULL CHECK (rating BETWEEN 1 AND 5),
+    comment TEXT,
+    created_at TIMESTAMP
+);
+
+CREATE TABLE UserLog (
+    id SERIAL PRIMARY KEY,
+    user_id INT REFERENCES Users(id),
+    action VARCHAR(255) NOT NULL,
+    log_time TIMESTAMP,
+    ip_address VARCHAR(45)
+);

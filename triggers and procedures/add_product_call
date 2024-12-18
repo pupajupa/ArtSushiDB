@@ -1,0 +1,7 @@
+CREATE OR REPLACE PROCEDURE add_product(p_category_id INT, p_name VARCHAR, p_description TEXT, p_price DECIMAL, p_image_url VARCHAR)
+LANGUAGE plpgsql AS $$
+BEGIN
+    INSERT INTO Product(category_id, name, description, price, image_url, created_at, updated_at)
+    VALUES (p_category_id, p_name, p_description, p_price, p_image_url, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+END;
+$$;

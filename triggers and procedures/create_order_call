@@ -1,0 +1,16 @@
+CREATE OR REPLACE PROCEDURE create_order(p_user_id INT, p_delivery_address VARCHAR, p_payment_method_id INT)
+LANGUAGE plpgsql AS $$
+DECLARE
+    v_cart_id INT;
+BEGIN
+    -- Получаем cart_id пользователя
+    SELECT id INTO v_cart_id FROM Cart WHERE user_id = p_user_id;
+
+    -- Создаем заказ
+    INSERT INTO "Order"(status_id, cart_id, total_price, delivery_address, payment_method_id, created_at, updated_at)
+    VALUES (1, v_cart_id, 0, p_delivery_address, p_payment_method_id, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+    -- Обновляем сумму заказа
+    PERFORM update_order_total();
+END;
+$$;

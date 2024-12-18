@@ -1,0 +1,8 @@
+CREATE OR REPLACE PROCEDURE update_order_status(p_order_id INT, p_status_id INT)
+LANGUAGE plpgsql AS $$
+BEGIN
+    UPDATE "Order"
+    SET status_id = p_status_id, updated_at = CURRENT_TIMESTAMP
+    WHERE id = p_order_id;
+END;
+$$;

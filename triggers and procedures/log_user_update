@@ -1,0 +1,13 @@
+CREATE OR REPLACE FUNCTION log_user_update()
+RETURNS TRIGGER AS $$
+BEGIN
+    INSERT INTO UserLog(user_id, action, log_time, ip_address)
+    VALUES (NEW.id, 'User updated', CURRENT_TIMESTAMP, '127.0.0.1');
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trigger_log_user_update
+AFTER UPDATE ON User
+FOR EACH ROW
+EXECUTE FUNCTION log_user_update();

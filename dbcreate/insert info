@@ -1,0 +1,77 @@
+TRUNCATE TABLE Roles RESTART IDENTITY CASCADE;
+TRUNCATE TABLE Users RESTART IDENTITY CASCADE;
+TRUNCATE TABLE Category RESTART IDENTITY CASCADE;
+TRUNCATE TABLE Product RESTART IDENTITY CASCADE;
+TRUNCATE TABLE Cart RESTART IDENTITY CASCADE;
+TRUNCATE TABLE CartItem RESTART IDENTITY CASCADE;
+TRUNCATE TABLE OrderStatus RESTART IDENTITY CASCADE;
+TRUNCATE TABLE PaymentMethod RESTART IDENTITY CASCADE;
+TRUNCATE TABLE "Order" RESTART IDENTITY CASCADE;
+TRUNCATE TABLE Review RESTART IDENTITY CASCADE;
+TRUNCATE TABLE UserLog RESTART IDENTITY CASCADE;
+
+-- Заполнение таблицы Role
+INSERT INTO Roles (role_name) VALUES
+('Admin'),
+('Customer'),
+('Seller');
+
+-- Заполнение таблицы User
+INSERT INTO Users (role_id, created_at, email, phone, first_name, last_name, address, username, password) VALUES
+(1, NOW(), 'admin@example.com', NULL, 'Admin', 'User', '123 Admin St', 'admin', 'adminpass'),
+(2, NOW(), 'john.doe@example.com', '+1234567890', 'John', 'Doe', '456 Customer Rd', 'johndoe', 'password123'),
+(3, NOW(), 'jane.seller@example.com', '+9876543210', 'Jane', 'Seller', '789 Seller Ln', 'janeseller', 'sellerpass');
+
+-- Заполнение таблицы Category
+INSERT INTO Category (name, description, created_at, updated_at) VALUES
+('Electronics', 'Devices, gadgets, and accessories', NOW(), NOW()),
+('Books', 'Fiction and non-fiction books', NOW(), NOW()),
+('Clothing', 'Men and women apparel', NOW(), NOW());
+
+-- Заполнение таблицы Product
+INSERT INTO Product (category_id, name, description, price, image_url, created_at, updated_at) VALUES
+(1, 'Smartphone', 'Latest model smartphone with 128GB storage', 699.99, 'https://example.com/smartphone.jpg', NOW(), NOW()),
+(1, 'Laptop', 'High-performance laptop for gaming and work', 1299.99, 'https://example.com/laptop.jpg', NOW(), NOW()),
+(2, 'Novel: The Great Adventure', 'Bestselling adventure novel', 19.99, 'https://example.com/novel.jpg', NOW(), NOW()),
+(3, 'T-shirt', 'Comfortable cotton t-shirt', 15.99, 'https://example.com/tshirt.jpg', NOW(), NOW());
+
+-- Заполнение таблицы Cart
+INSERT INTO Cart (user_id, created_at) VALUES
+(2, NOW()),
+(3, NOW());
+
+-- Заполнение таблицы CartItem
+INSERT INTO CartItem (quantity, price, created_at, cart_id, product_id, updated_at) VALUES
+(2, 699.99, NOW(), 1, 1, NOW()),
+(1, 19.99, NOW(), 1, 3, NOW()),
+(3, 15.99, NOW(), 2, 4, NOW());
+
+-- Заполнение таблицы OrderStatus
+INSERT INTO OrderStatus (status_name) VALUES
+('Pending'),
+('Processing'),
+('Shipped'),
+('Delivered');
+
+-- Заполнение таблицы PaymentMethod
+INSERT INTO PaymentMethod (method_name) VALUES
+('Credit Card'),
+('PayPal'),
+('Cash on Delivery');
+
+-- Заполнение таблицы Order
+INSERT INTO "Order" (status_id, cart_id, total_price, delivery_address, payment_method_id, created_at, updated_at) VALUES
+(1, 1, 1419.97, '456 Customer Rd', 1, NOW(), NOW()),
+(2, 2, 47.97, '789 Seller Ln', 2, NOW(), NOW());
+
+-- Заполнение таблицы Review
+INSERT INTO Review (user_id, product_id, rating, comment, created_at) VALUES
+(2, 1, 5, 'Excellent smartphone, highly recommend!', NOW()),
+(2, 3, 4, 'Enjoyable read, but could be longer.', NOW()),
+(3, 4, 3, 'T-shirt is okay, but the size runs small.', NOW());
+
+-- Заполнение таблицы UserLog
+INSERT INTO UserLog (user_id, action, log_time, ip_address) VALUES
+(1, 'Logged in', NOW(), '192.168.0.1'),
+(2, 'Added item to cart', NOW(), '192.168.0.2'),
+(3, 'Placed an order', NOW(), '192.168.0.3');
